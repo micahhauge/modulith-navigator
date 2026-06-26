@@ -1,6 +1,8 @@
 package com.github.micahhauge.modulithnavigator
 
+import com.intellij.ide.projectView.ProjectView
 import com.intellij.openapi.options.Configurable
+import com.intellij.openapi.project.ProjectManager
 import com.intellij.ui.components.JBCheckBox
 import com.intellij.util.ui.FormBuilder
 import javax.swing.JComponent
@@ -43,6 +45,9 @@ class ModulithNavigatorConfigurable : Configurable {
             showClosedHeader = showClosedHeaderCheckbox?.isSelected ?: true
             showOtherHeader = showOtherHeaderCheckbox?.isSelected ?: true
             showSectionIcons = showIconsCheckbox?.isSelected ?: true
+        }
+        ProjectManager.getInstance().openProjects.forEach { project ->
+            ProjectView.getInstance(project).refresh()
         }
     }
 
