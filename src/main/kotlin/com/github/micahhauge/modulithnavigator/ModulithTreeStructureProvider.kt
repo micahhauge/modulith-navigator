@@ -34,11 +34,18 @@ class ModulithTreeStructureProvider : TreeStructureProvider {
         val openHeader = project?.let { SectionHeaderNode(it, "Open Modules", 9, AllIcons.Nodes.Public) }
         val internalHeader = project?.let { SectionHeaderNode(it, "Closed Modules", 99, AllIcons.Nodes.Padlock) }
 
-        // Non-package children (non-dirs and synthetic dirs like JavaWebApplication) go at the bottom
-        val otherChildren = children.filterNot { child -> child is PsiDirectoryNode && isJavaPackageDir(child) }
+        // Non-package PsiDirectoryNodes (e.g. JavaWebApplication) are wrapped with weight 200 so
+        // AlphaComparator places them after all module sections (which top out at weight 100).
+        // Truly non-directory items are left as-is.
+        val nonPackageDirs = children.filterIsInstance<PsiDirectoryNode>().filterNot { isJavaPackageDir(it) }
+        val wrappedNonPackage = nonPackageDirs.map { node ->
+            node.value?.let { dir -> node.project?.let { NonModuleDirectoryNode(it, dir, settings) } } ?: node
+        }
+        val nonDirItems = children.filter { it !is PsiDirectoryNode }
+
         return listOfNotNull(openHeader) + open +
                listOfNotNull(internalHeader) + wrappedInternal +
-               otherChildren
+               wrappedNonPackage + nonDirItems
     }
 
     private fun isJavaPackageDir(node: PsiDirectoryNode): Boolean {
