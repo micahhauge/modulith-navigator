@@ -12,7 +12,14 @@ A module is considered **internal** if its only subdirectory is named `internal`
 
 <kbd>Settings</kbd> > <kbd>Plugins</kbd> > <kbd>Marketplace</kbd> > search for **Modulith Navigator** > <kbd>Install</kbd>
 
-### Manually from a local build
+### From GitHub Releases
+
+1. Download `modulith-navigator-*.zip` from the [latest release](https://github.com/micahhauge/modulith-navigator/releases/latest)
+2. In IntelliJ: <kbd>Settings</kbd> > <kbd>Plugins</kbd> > <kbd>⚙️</kbd> > <kbd>Install Plugin from Disk...</kbd>
+3. Select the downloaded zip
+4. Restart IntelliJ
+
+### From a local build
 
 1. Clone the repo and build the plugin:
    ```bash

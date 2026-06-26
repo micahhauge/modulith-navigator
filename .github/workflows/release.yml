@@ -56,8 +56,13 @@ jobs:
 
           ./gradlew patchChangelog --release-note-file=$RELEASE_NOTE
 
-      # Publish the plugin to JetBrains Marketplace
+      # Build the plugin zip
+      - name: Build Plugin
+        run: ./gradlew buildPlugin
+
+      # Publish the plugin to JetBrains Marketplace (only if secrets are configured)
       - name: Publish Plugin
+        if: ${{ secrets.PUBLISH_TOKEN != '' }}
         env:
           PUBLISH_TOKEN: ${{ secrets.PUBLISH_TOKEN }}
           CERTIFICATE_CHAIN: ${{ secrets.CERTIFICATE_CHAIN }}
