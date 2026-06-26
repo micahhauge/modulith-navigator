@@ -8,10 +8,6 @@ A module is considered **internal** if its only subdirectory is named `internal`
 
 ## Installation
 
-### From the JetBrains Marketplace _(coming soon)_
-
-<kbd>Settings</kbd> > <kbd>Plugins</kbd> > <kbd>Marketplace</kbd> > search for **Modulith Navigator** > <kbd>Install</kbd>
-
 ### From GitHub Releases
 
 1. Download `modulith-navigator-*.zip` from the [latest release](https://github.com/micahhauge/modulith-navigator/releases/latest)
