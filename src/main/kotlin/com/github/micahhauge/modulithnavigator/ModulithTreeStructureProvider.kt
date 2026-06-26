@@ -13,6 +13,10 @@ class ModulithTreeStructureProvider : TreeStructureProvider {
         children: Collection<AbstractTreeNode<*>>,
         settings: ViewSettings?,
     ): Collection<AbstractTreeNode<*>> {
+        // Only sort when inside a package directory; at project/module level, non-module nodes
+        // (e.g. JavaWebApplication) are also PsiDirectoryNodes and would be misclassified as open modules.
+        if (parent !is PsiDirectoryNode) return children
+
         val dirs = children.filterIsInstance<PsiDirectoryNode>()
         if (dirs.size < 2) return children
 
