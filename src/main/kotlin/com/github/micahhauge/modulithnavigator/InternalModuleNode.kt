@@ -8,5 +8,5 @@ import com.intellij.psi.PsiDirectory
 class InternalModuleNode(project: Project, dir: PsiDirectory, settings: ViewSettings?) :
     PsiDirectoryNode(project, dir, settings) {
 
-    override fun getWeight(): Int = 100
+    override fun getWeight(): Int = -1
 }

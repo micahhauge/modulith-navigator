@@ -25,27 +25,23 @@ class ModulithTreeStructureProvider : TreeStructureProvider {
 
         val project = open.firstOrNull()?.project ?: internal.firstOrNull()?.project
 
+        // Wrap both sections with negative weights so AlphaComparator floats them to the top.
+        // Anything we don't touch keeps its natural weight (~10) and falls below automatically.
+        val wrappedOpen = open.map { node ->
+            node.value?.let { dir -> node.project?.let { OpenModuleNode(it, dir, settings) } } ?: node
+        }
         val wrappedInternal = internal.map { node ->
-            node.value?.let { dir ->
-                node.project?.let { InternalModuleNode(it, dir, settings) }
-            } ?: node
+            node.value?.let { dir -> node.project?.let { InternalModuleNode(it, dir, settings) } } ?: node
         }
 
-        val openHeader = project?.let { SectionHeaderNode(it, "Open Modules", 9, AllIcons.Nodes.Public) }
-        val internalHeader = project?.let { SectionHeaderNode(it, "Closed Modules", 99, AllIcons.Nodes.Padlock) }
+        val openHeader = project?.let { SectionHeaderNode(it, "Open Modules", -20, AllIcons.Nodes.Public) }
+        val internalHeader = project?.let { SectionHeaderNode(it, "Closed Modules", -2, AllIcons.Nodes.Padlock) }
 
-        // Non-package PsiDirectoryNodes (e.g. JavaWebApplication) are wrapped with weight 200 so
-        // AlphaComparator places them after all module sections (which top out at weight 100).
-        // Truly non-directory items are left as-is.
-        val nonPackageDirs = children.filterIsInstance<PsiDirectoryNode>().filterNot { isJavaPackageDir(it) }
-        val wrappedNonPackage = nonPackageDirs.map { node ->
-            node.value?.let { dir -> node.project?.let { NonModuleDirectoryNode(it, dir, settings) } } ?: node
-        }
-        val nonDirItems = children.filter { it !is PsiDirectoryNode }
+        val otherChildren = children.filterNot { child -> child is PsiDirectoryNode && isJavaPackageDir(child) }
 
-        return listOfNotNull(openHeader) + open +
+        return listOfNotNull(openHeader) + wrappedOpen +
                listOfNotNull(internalHeader) + wrappedInternal +
-               wrappedNonPackage + nonDirItems
+               otherChildren
     }
 
     private fun isJavaPackageDir(node: PsiDirectoryNode): Boolean {
