@@ -34,14 +34,19 @@ class ModulithTreeStructureProvider : TreeStructureProvider {
             node.value?.let { dir -> node.project?.let { InternalModuleNode(it, dir, settings) } } ?: node
         }
 
-        val openHeader = project?.let { SectionHeaderNode(it, "Open Modules", -20, AllIcons.Nodes.Public) }
-        val internalHeader = project?.let { SectionHeaderNode(it, "Closed Modules", -2, AllIcons.Nodes.Padlock) }
-
+        val pluginSettings = ModulithNavigatorSettings.getInstance().state
         val otherChildren = children.filterNot { child -> child is PsiDirectoryNode && isJavaPackageDir(child) }
 
+        val openHeader = project?.takeIf { pluginSettings.showOpenHeader }
+            ?.let { SectionHeaderNode(it, "Open Modules", -20, AllIcons.Nodes.Public) }
+        val closedHeader = project?.takeIf { pluginSettings.showClosedHeader }
+            ?.let { SectionHeaderNode(it, "Closed Modules", -2, AllIcons.Nodes.Padlock) }
+        val otherHeader = project?.takeIf { pluginSettings.showOtherHeader && otherChildren.isNotEmpty() }
+            ?.let { SectionHeaderNode(it, "Other Files", 2, AllIcons.Nodes.Folder) }
+
         return listOfNotNull(openHeader) + wrappedOpen +
-               listOfNotNull(internalHeader) + wrappedInternal +
-               otherChildren
+               listOfNotNull(closedHeader) + wrappedInternal +
+               listOfNotNull(otherHeader) + otherChildren
     }
 
     private fun isJavaPackageDir(node: PsiDirectoryNode): Boolean {

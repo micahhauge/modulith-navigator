@@ -8,7 +8,12 @@ import com.intellij.openapi.components.Storage
 @State(name = "ModulithNavigatorSettings", storages = [Storage("modulith-navigator.xml")])
 class ModulithNavigatorSettings : PersistentStateComponent<ModulithNavigatorSettings.SettingsState> {
 
-    data class SettingsState(var showSectionIcons: Boolean = true)
+    data class SettingsState(
+        var showOpenHeader: Boolean = true,
+        var showClosedHeader: Boolean = true,
+        var showOtherHeader: Boolean = true,
+        var showSectionIcons: Boolean = true,
+    )
 
     private var state = SettingsState()
 
