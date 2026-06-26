@@ -42,7 +42,7 @@ class ModulithTreeStructureProvider : TreeStructureProvider {
         val closedHeader = project?.takeIf { pluginSettings.showClosedHeader }
             ?.let { SectionHeaderNode(it, "Closed Modules", -2, AllIcons.Nodes.Padlock) }
         val otherHeader = project?.takeIf { pluginSettings.showOtherHeader && otherChildren.isNotEmpty() }
-            ?.let { SectionHeaderNode(it, "Other Files", 2, AllIcons.Nodes.Folder) }
+            ?.let { SectionHeaderNode(it, "Other Files", 2) }
 
         return listOfNotNull(openHeader) + wrappedOpen +
                listOfNotNull(closedHeader) + wrappedInternal +
