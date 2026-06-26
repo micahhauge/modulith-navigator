@@ -13,6 +13,7 @@ class ModulithNavigatorSettings : PersistentStateComponent<ModulithNavigatorSett
         var showClosedHeader: Boolean = true,
         var showOtherHeader: Boolean = true,
         var showSectionIcons: Boolean = true,
+        var dimInternalSuffix: Boolean = true,
     )
 
     private var state = SettingsState()

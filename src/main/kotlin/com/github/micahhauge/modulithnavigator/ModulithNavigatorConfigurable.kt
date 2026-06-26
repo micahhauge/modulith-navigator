@@ -14,6 +14,7 @@ class ModulithNavigatorConfigurable : Configurable {
     private var showClosedHeaderCheckbox: JBCheckBox? = null
     private var showOtherHeaderCheckbox: JBCheckBox? = null
     private var showIconsCheckbox: JBCheckBox? = null
+    private var dimInternalSuffixCheckbox: JBCheckBox? = null
 
     override fun getDisplayName(): String = "Modulith Navigator"
 
@@ -22,11 +23,14 @@ class ModulithNavigatorConfigurable : Configurable {
         showClosedHeaderCheckbox = JBCheckBox("Show \"Closed Modules\" header")
         showOtherHeaderCheckbox = JBCheckBox("Show \"Other Files\" header")
         showIconsCheckbox = JBCheckBox("Show icons on headers")
+        dimInternalSuffixCheckbox = JBCheckBox("Dim .internal suffix on closed modules")
         return FormBuilder.createFormBuilder()
             .addComponent(showOpenHeaderCheckbox!!)
             .addComponent(showClosedHeaderCheckbox!!)
             .addComponent(showOtherHeaderCheckbox!!)
             .addComponent(showIconsCheckbox!!)
+            .addSeparator()
+            .addComponent(dimInternalSuffixCheckbox!!)
             .addComponentFillVertically(JPanel(), 0)
             .panel
     }
@@ -36,7 +40,8 @@ class ModulithNavigatorConfigurable : Configurable {
         return showOpenHeaderCheckbox?.isSelected != s.showOpenHeader ||
                showClosedHeaderCheckbox?.isSelected != s.showClosedHeader ||
                showOtherHeaderCheckbox?.isSelected != s.showOtherHeader ||
-               showIconsCheckbox?.isSelected != s.showSectionIcons
+               showIconsCheckbox?.isSelected != s.showSectionIcons ||
+               dimInternalSuffixCheckbox?.isSelected != s.dimInternalSuffix
     }
 
     override fun apply() {
@@ -45,6 +50,7 @@ class ModulithNavigatorConfigurable : Configurable {
             showClosedHeader = showClosedHeaderCheckbox?.isSelected ?: true
             showOtherHeader = showOtherHeaderCheckbox?.isSelected ?: true
             showSectionIcons = showIconsCheckbox?.isSelected ?: true
+            dimInternalSuffix = dimInternalSuffixCheckbox?.isSelected ?: true
         }
         ProjectManager.getInstance().openProjects.forEach { project ->
             ProjectView.getInstance(project).refresh()
@@ -57,6 +63,7 @@ class ModulithNavigatorConfigurable : Configurable {
         showClosedHeaderCheckbox?.isSelected = s.showClosedHeader
         showOtherHeaderCheckbox?.isSelected = s.showOtherHeader
         showIconsCheckbox?.isSelected = s.showSectionIcons
+        dimInternalSuffixCheckbox?.isSelected = s.dimInternalSuffix
     }
 
     override fun disposeUIResources() {
@@ -64,5 +71,6 @@ class ModulithNavigatorConfigurable : Configurable {
         showClosedHeaderCheckbox = null
         showOtherHeaderCheckbox = null
         showIconsCheckbox = null
+        dimInternalSuffixCheckbox = null
     }
 }
