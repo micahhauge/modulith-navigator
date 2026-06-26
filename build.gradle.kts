@@ -1,9 +1,15 @@
 import org.jetbrains.intellij.platform.gradle.TestFrameworkType
+import org.jetbrains.intellij.platform.gradle.tasks.RunIdeTask
 
 plugins {
     id("org.jetbrains.kotlin.jvm")
     id("org.jetbrains.intellij.platform")
     id("org.jetbrains.changelog")
+}
+
+tasks.named<RunIdeTask>("runIde") {
+    val dir = providers.gradleProperty("projectDir").orNull
+    if (dir != null) args(dir)
 }
 
 dependencies {
