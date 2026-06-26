@@ -13,14 +13,14 @@ class ModulithTreeStructureProvider : TreeStructureProvider {
         children: Collection<AbstractTreeNode<*>>,
         settings: ViewSettings?,
     ): Collection<AbstractTreeNode<*>> {
-        // Only sort when inside a package directory; at project/module level, non-module nodes
-        // (e.g. JavaWebApplication) are also PsiDirectoryNodes and would be misclassified as open modules.
         if (parent !is PsiDirectoryNode) return children
 
-        val dirs = children.filterIsInstance<PsiDirectoryNode>()
-        if (dirs.size < 2) return children
+        // Only consider directories whose names look like Java packages (lowercase).
+        // This excludes IntelliJ synthetic nodes like "JavaWebApplication".
+        val packageDirs = children.filterIsInstance<PsiDirectoryNode>().filter { isJavaPackageDir(it) }
+        if (packageDirs.size < 2) return children
 
-        val (open, internal) = dirs.partition { !isInternalModule(it) }
+        val (open, internal) = packageDirs.partition { !isInternalModule(it) }
         if (open.isEmpty() || internal.isEmpty()) return children
 
         val project = open.firstOrNull()?.project ?: internal.firstOrNull()?.project
@@ -34,10 +34,16 @@ class ModulithTreeStructureProvider : TreeStructureProvider {
         val openHeader = project?.let { SectionHeaderNode(it, "Open Modules", 9, AllIcons.Nodes.Public) }
         val internalHeader = project?.let { SectionHeaderNode(it, "Closed Modules", 99, AllIcons.Nodes.Padlock) }
 
-        val nonDirs = children.filter { it !is PsiDirectoryNode }
+        // Non-package children (non-dirs and synthetic dirs like JavaWebApplication) go at the bottom
+        val otherChildren = children.filterNot { child -> child is PsiDirectoryNode && isJavaPackageDir(child) }
         return listOfNotNull(openHeader) + open +
                listOfNotNull(internalHeader) + wrappedInternal +
-               nonDirs
+               otherChildren
+    }
+
+    private fun isJavaPackageDir(node: PsiDirectoryNode): Boolean {
+        val name = node.virtualFile?.name ?: return false
+        return name.matches(Regex("[a-z][a-z0-9]*"))
     }
 
     private fun isInternalModule(node: PsiDirectoryNode): Boolean {
