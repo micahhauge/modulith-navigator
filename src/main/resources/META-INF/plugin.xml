@@ -16,5 +16,12 @@
     <extensions defaultExtensionNs="com.intellij">
         <treeStructureProvider
             implementation="com.github.micahhauge.modulithnavigator.ModulithTreeStructureProvider"/>
+        <applicationService
+            serviceImplementation="com.github.micahhauge.modulithnavigator.ModulithNavigatorSettings"/>
+        <applicationConfigurable
+            parentId="tools"
+            instance="com.github.micahhauge.modulithnavigator.ModulithNavigatorConfigurable"
+            id="com.github.micahhauge.modulithnavigator.ModulithNavigatorConfigurable"
+            displayName="Modulith Navigator"/>
     </extensions>
 </idea-plugin>

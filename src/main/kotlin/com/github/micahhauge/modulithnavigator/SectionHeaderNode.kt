@@ -16,7 +16,9 @@ class SectionHeaderNode(project: Project, label: String, private val nodeWeight:
     override fun getChildren(): Collection<AbstractTreeNode<*>> = emptyList()
 
     override fun update(presentation: PresentationData) {
-        presentation.setIcon(icon)
+        if (ModulithNavigatorSettings.getInstance().state.showSectionIcons) {
+            presentation.setIcon(icon)
+        }
         presentation.addText(value ?: return, SimpleTextAttributes.GRAYED_ATTRIBUTES)
     }
 
