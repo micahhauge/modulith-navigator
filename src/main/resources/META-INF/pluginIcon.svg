@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+
+  <!-- Flat-top hexagon (r=83, center 100,100) -->
+  <polygon
+    points="183,100 142,28 58,28 17,100 58,172 142,172"
+    fill="none"
+    stroke="#6abf1c"
+    stroke-width="9"
+    stroke-linejoin="round"
+  />
+
+  <!-- Navigation arrow: reference path (35x35) scaled to ~88px, centered at 100,100 -->
+  <g transform="translate(94,107) scale(2.5) translate(-17.5,-17.5)" fill="#6abf1c">
+    <path d="M21.81,34.75H21.5A3.8,3.8,0,0,1,18,31.58L16,20.12A1.36,1.36,0,0,0,14.88,19L3.42,17a3.84,3.84,0,0,1-.56-7.42L29.66.46h0a3.84,3.84,0,0,1,4.88,4.88l-9.11,26.8A3.79,3.79,0,0,1,21.81,34.75ZM30.47,2.83,3.66,11.94a1.34,1.34,0,0,0,.2,2.59l11.46,2a3.85,3.85,0,0,1,3.11,3.11l2,11.46a1.34,1.34,0,0,0,2.59.2L32.17,4.53a1.34,1.34,0,0,0-1.7-1.7Z"/>
+  </g>
+
+</svg>
